@@ -1,10 +1,9 @@
 (ns aoc-23.day-02.cube-conundrum
-  (:require [clojure.java.io :as io]
-            [clojure.string :as str]))
+  (:require [clojure.java.io :as io]))
 
 (def input-path "inputs/02")
+
 (def max-cubes-map {:red 12, :green 13, :blue 14})
-#_(def colour-names (mapv name (keys max-cubes-map)))
 
 (defn parse-max-cubes
   "Take game data as string `s`, and collect maximum cubes of each colour along
