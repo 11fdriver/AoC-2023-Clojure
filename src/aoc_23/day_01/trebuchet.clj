@@ -1,5 +1,6 @@
 (ns aoc-23.day-01.trebuchet
-  (:require [clojure.java.io :as io]))
+  (:require [clojure.java.io :as io]
+            [clojure.string :as s]))
 
 (def input-path "inputs/01")
 
@@ -24,7 +25,7 @@
                    (map read-string)))]
     (sequence xf strings)))
 
-(def result-1
+(def star-1
   (with-open [rdr (io/reader input-path)]
     (reduce + (get-calibration-values (line-seq rdr))))) ;=> 54927
 
@@ -43,11 +44,10 @@
   (let [first-re (reduce #(str %1 \| %2) digit-words)
         last-re (str "(.*)(" first-re ")(.*)")]
     (some-> s
-        (clojure.string/replace-first (re-pattern first-re) word->digit-map) ;map as function
-        (clojure.string/replace-first (re-pattern last-re)
-                                      #(str (% 1) (word->digit-map (% 2)) (% 3))))))
+        (s/replace-first (re-pattern first-re) word->digit-map) ;map as function
+        (s/replace-first (re-pattern last-re) #(str (% 1) (word->digit-map (% 2)) (% 3))))))
 
-(def result-2
+(def star-2
   (with-open [rdr (io/reader input-path)]
     (reduce + (get-calibration-values
                (map first-and-last-words->digits (line-seq rdr)))))) ;=> 54581
@@ -84,6 +84,6 @@
                    (map read-string)))]
     (sequence xf strings)))
 
-(def result-2'
+(def star-2'
   (with-open [rdr (io/reader input-path)]
     (reduce + (get-correct-calibration-values (line-seq rdr))))) ;=> 54581
