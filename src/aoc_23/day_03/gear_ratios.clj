@@ -86,5 +86,31 @@
 
 (def star-1 (reduce + (find-part-numbers input-string)))
 
-(def star-2 nil)
+(defn find-indexed-*s
+  "Return collection of [index *] forms from v of forms [index char]."
+  [v]
+  (filter #(= \* (second %)) v))
+
+(defn find-*-adjacent-numbers
+  "Return collection of forms [*-index number] where number is adjacent (up,
+  down, left, right, or diagonally) to a '*' character.
+  See `find-indexed-*s`."
+  [s]
+  (let [width (count (re-find #".*\n" s))
+        indexed-chars (map-indexed vector s)
+        gear-indexes (set (map first (find-indexed-*s indexed-chars)))]
+    (for [[is n] (find-indexed-numbers indexed-chars)
+          :let [adjacent-gear (some gear-indexes (adjacent-indexes is width))]
+          :when adjacent-gear]
+      [adjacent-gear n])))
+
+(defn find-gear-numbers
+  "Return collection of numbers that are adjacent to a gear.
+  A gear is a '*' symbol with exactly two adjacent numbers."
+  [s]
+  (for [[k v] (group-by first (find-*-adjacent-numbers s))
+        :when (= 2 (count v))]
+    (mapv second v)))
+
+(def star-2 (reduce + (map (partial reduce *) (find-gear-numbers input-string))))
 
