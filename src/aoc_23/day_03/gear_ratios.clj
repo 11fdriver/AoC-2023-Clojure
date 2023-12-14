@@ -1,6 +1,4 @@
-(ns aoc-23.day-03.gear-ratios
-  (:require [clojure.java.io :as io]
-            [clojure.string :as str]))
+(ns aoc-23.day-03.gear-ratios)
 
 (def input-path "inputs/03")
 
