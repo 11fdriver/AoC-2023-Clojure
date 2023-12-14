@@ -6,7 +6,7 @@
 (def max-cubes-map {:red 12, :green 13, :blue 14})
 
 (defn parse-max-cubes
-  "Take game data as string `s`, and collect maximum cubes of each colour along
+  "Take game data as string s, and collect maximum cubes of each colour along
   with id, returning as a map of format {:id n :colour1 m :colour2 ...}."
   [s]
   (let [init-map (assoc (zipmap (keys max-cubes-map) (repeat 0))
@@ -20,6 +20,7 @@
             (re-seq re s))))
 
 (defn valid-game?
+  "Return true if game m is possible according to the values in `max-cubes-map`."
   [m]
   (every? #(<= (get m %) (get max-cubes-map %))
           (keys max-cubes-map)))
@@ -32,6 +33,7 @@
       (transduce xf + (line-seq rdr))))) ;=> 2176
 
 (defn game-power
+  "Returns the 'power' of a game m i.e. red, green, & blue values multiplied."
   [m]
   (reduce * (vals (dissoc m :id))))
 
