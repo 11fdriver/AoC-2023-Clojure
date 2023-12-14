@@ -6,19 +6,6 @@
 
 (def input-string (slurp input-path))
 
-(def test-input
-  (str/triml "
-467..114..
-...*......
-..35..633.
-......#...
-617*......
-.....+.58.
-..592.....
-......755.
-...$.*....
-.664.598.."))
-
 (defn digit-char?
   "Returns true if c has an ascii value from 48 to 57, inclusive."
   [c]
@@ -113,4 +100,3 @@
     (mapv second v)))
 
 (def star-2 (reduce + (map (partial reduce *) (find-gear-numbers input-string))))
-
