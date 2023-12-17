@@ -1,5 +1,6 @@
 (ns aoc-23.day-04.scratchcards
-  (:require [clojure.string :as str]))
+  (:require [clojure.set :as set]
+            [clojure.string :as str]))
 
 (def input-string (slurp "inputs/04"))
 
@@ -19,7 +20,7 @@
   [cards]
   (->> cards
        (mapv set)
-       (apply clojure.set/intersection)
+       (apply set/intersection)
        count))
 
 (defn card-table->points
