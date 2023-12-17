@@ -1,4 +1,4 @@
-(ns aoc-23.day-04.if-you-give-a-seed-a-fertilizer)
+(ns aoc-23.day-05.if-you-give-a-seed-a-fertilizer)
 
 (def input-string (slurp "inputs/05"))
 
