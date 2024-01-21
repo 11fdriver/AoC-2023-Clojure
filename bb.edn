@@ -1,2 +1,24 @@
 {:paths ["src"]
- :deps {aoc-23 {:local/root "."}}}
+ :deps {aoc-23 {:local/root "."}}
+ :min-bb-version "1.0.0"
+ :tasks
+ {print-args (prn *command-line-args*)
+  get-input {:doc "Download an Advent of Code input file given the day number."
+             :requires ([clojure.string :refer [trim-newline]]
+                        [babashka.fs :refer [exists?]]
+                        [babashka.http-client :as http :refer [get]])
+             :task
+             (try
+               (let [n (parse-long (nth *command-line-args* 0))
+                     c (slurp "file:.aoc-23-session-cookie")
+                     f (str "inputs/" (format "%02d" n))
+                     url (str "https://adventofcode.com/2023/day/" n "/input")]
+                 (cond
+                   (nil? n) (println "(<= 1 arg 25)?")
+                   (exists? f) (println "File for day" n "already exists.")
+                   :otherwise
+                   (spit f (:body (http/get url {:headers {"Cookie" (trim-newline c)}})))))
+               (catch java.net.ConnectException e (println "Can't find web-file."))
+               (catch java.io.IOException e (println (ex-message e)))
+               (catch java.lang.IllegalArgumentException e (println "(<= 1 arg 25)?"))
+               (catch clojure.lang.ExceptionInfo e (println (ex-message e))))}}}
