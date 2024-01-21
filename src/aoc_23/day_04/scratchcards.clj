@@ -29,8 +29,8 @@
   [s]
   (let [max-nums (-> (re-find #"(?<=: +).*(?= \|)" input-string)
                      (str/split #" +")
-                     (count))
-        scores (vec (cons 0 (take max-nums (iterate #(* 2 %) 1))))]
+                     (count))           ;Maximum possible winning numbers
+        scores (apply vector 0 (take max-nums (iterate #(* 2 %) 1)))]
     (->> s
          (card-table->vector)
          (map scratchcard-wins)
@@ -60,20 +60,18 @@
   (defn card-table->points'
     "Faster way to convert card-table to points than `card-table->points`."
     [s]
-    (let [max-nums (-> (re-find #"(?<=: +).*(?= \|)" input-string)
+    (let [max-nums (-> (re-find #"(?<=: +).*(?= \|)" s)
                        (str/split #" +")
                        (count))
-          scores (vec (cons 0 (take max-nums (iterate #(* 2 %) 1))))
-          xf (comp (map #(re-find #"(?<=:).*" %))
-                   (mapcat #(str/split % #"\|"))
+          scores (apply vector 0 (take max-nums (iterate #(* 2 %) 1)))
+          xf (comp (map #(re-find #"(?<=:).*" %)) ;Remove start
+                   (mapcat #(str/split % #"\|"))  ;Split into winners and 'scratched'
                    (map str/triml)
-                   (map #(str/split % #" +"))
+                   (map #(str/split % #" +")) ;Individual numbers
                    (map #(mapv parse-long %))
-                   (map #(mapv int %))
                    (map set)
-                   (completing #(partition 2 %))
-                   ;; Something weird happens around here; don't know why
-                   (map #(apply clojure.set/intersection %))
-                   (map count)
-                   (map #(get scores %)))]
-      (transduce + xf (str/split-lines s)))))
+                   (partition-all 2)                         ;Group into pairs
+                   (map #(apply clojure.set/intersection %)) ;Get winning numbers
+                   (map count)                               ;Count wins
+                   (map #(get scores %)))]                   ;Look up final score
+      (transduce xf + (str/split-lines s)))
