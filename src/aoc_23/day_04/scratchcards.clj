@@ -75,3 +75,4 @@
                    (map count)                               ;Count wins
                    (map #(get scores %)))]                   ;Look up final score
       (transduce xf + (str/split-lines s)))
+    ))
