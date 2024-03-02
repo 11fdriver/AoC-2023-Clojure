@@ -3,11 +3,8 @@
 
 (def input-string (slurp "inputs/09"))
 
-(def test-input "0 3 6 9 12 15
-1 3 6 10 15 21
-10 13 16 21 30 45")
-
 (defn parse-oasis-readings
+  "Take string s of OASIS readings and return as vectors of longs."
   [s]
   (letfn [(split-spaced [s] (str/split s #" "))
           (parse-longsv [coll] (mapv parse-long coll))]
@@ -16,12 +13,46 @@
          (map split-spaced)
          (map parse-longsv))))
 
-(def star-1 nil)
+(defn find-difference-series
+  "Take vector v of numbers and return vector of effects of repeatedly finding
+  differences between numbers in list, until just list of zeros or empty."
+  [v]
+  (letfn [(difference [[x y]] (- y x))]
+    (loop [current v 
+           history []]
+      (if (every? zero? current)
+        (conj history current)
+        (recur (mapv difference (partition 2 1 current))
+               (conj history current))))))
 
-(def star-2 nil)
+(defn find-next-in-series
+  "Take vector v of numbers and find next in series, assuming that the series'
+  differences reduces to a list of just zeros, see `find-difference-series`."
+  [v]
+  (->> v
+       (find-difference-series)
+       (map peek)
+       (reduce +)))
 
-(comment
-  (map (fn [[x y]] (- y x))
-       (partition 2 1
-                  (first (parse-oasis-readings test-input))))
-  )
+(def star-1 (->> input-string
+                 (parse-oasis-readings)
+                 (map find-next-in-series)
+                 (reduce +)))
+;; (= 1882395907 star-1)
+
+(defn find-prior-in-series
+  "Take vector v of numbers and find prior number in series, assuming that the
+  series' differences reduces to a list of just zeros, see
+  `find-difference-series`."
+  [v]
+  (->> v
+       (find-difference-series)
+       (rseq) ;Faster than reverse for vectors.
+       (map #(nth % 0))
+       (reduce #(- %2 %1))))
+
+(def star-2 (->> input-string
+                 (parse-oasis-readings)
+                 (map find-prior-in-series)
+                 (reduce +)))
+;; (= 1005 star-2)
