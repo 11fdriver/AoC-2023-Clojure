@@ -56,8 +56,7 @@
 
 (def star-2 (card-table->total-cards input-string))
 
-(comment
-  (defn card-table->points'
+#_(defn card-table->points'
     "Faster way to convert card-table to points than `card-table->points`."
     [s]
     (let [max-nums (-> (re-find #"(?<=: +).*(?= \|)" s)
@@ -74,5 +73,4 @@
                    (map #(apply clojure.set/intersection %)) ;Get winning numbers
                    (map count)                               ;Count wins
                    (map #(get scores %)))]                   ;Look up final score
-      (transduce xf + (str/split-lines s)))
-    ))
+      (transduce xf + (str/split-lines s))))
