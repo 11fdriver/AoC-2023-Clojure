@@ -1,0 +1,30 @@
+* Advent of Code 2023 in Clojure
+
+This repo contains solutions to [[https://adventofcode.com/2023]] written in the [[https://clojure.org/][Clojure]] functional Lisp programming language, mirrored from a local [[https://fossil-scm.org/][Fossil]] repository. It was developed in [[https://www.gnu.org/software/emacs/][GNU Emacs]] with help from [[https://cider.mx/][CIDER]].
+
+* How to run
+
+Just run =clj -X:solutions= from the project root to load, run & print all completed solutions. This runs the =-main= function in =src/aoc_23/main.clj=.
+
+*Requirements*:
+- Clojure 1.11.1+
+
+* Get puzzle inputs
+
+*Requirements*:
+- [[https://babashka.org/][Babashka]]
+- Your AoC session cookie.
+
+Session cookie in Firefox: =right click > Inspect > 🗄 Storage > Cookies=.
+
+Session cookie in Chromium: =right click > Inspect > Network > Cookie=.
+
+Place this into a file named =.aoc-23-session-cookie=.
+
+Run =bb get-input 1= to get the first day's input.
+
+The script is simple, and resides in =bb.edn= for reference.
+
+
+
+
